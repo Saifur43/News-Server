@@ -159,3 +159,134 @@ def kalerkonto(url):
             new_news.save()
             i = i + 1
 
+
+def chanel_i(url):
+    page = requests.get(url)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    newslist = soup.find('div', class_='col-sm-12')
+
+    for news in newslist.find_all('div', class_='item-content'):
+
+        if News.objects.filter(title=news.find('h2').text).exists():
+            continue
+        else:
+            new_news = News()
+            new_news.source_name = 'চ্যানেল আই অনলাইন'
+            new_news.source_slug = 'Chaneli'
+            new_news.title = news.find('h2').text
+            new_news.link = news.find('a').get('href')
+            new_news.img_link = news.find('a')['data-src']
+            tags = news.find_all('a')
+            new_news.category_slug = tags[1].text
+            new_news.save()
+
+    newslist2 = soup.find('div', class_='col-sm-8 content-column')
+    for news in newslist2.find_all('div', class_='item-inner clearfix'):
+
+        if News.objects.filter(title=news.find('h2').text).exists():
+            continue
+        else:
+            new_news = News()
+            new_news.source_name = 'চ্যানেল আই অনলাইন'
+            new_news.source_slug = 'Chaneli'
+            new_news.title = news.find('h2').text
+            new_news.link = news.find('a').get('href')
+            style = news.find_all('a')[3]
+            new_news.img_link = style['data-src']
+            tags = news.find_all('a')
+            new_news.category_slug = tags[2].text
+            new_news.save()
+
+
+def bdnews24(url):
+
+    url1 = "https://bangla.bdnews24.com/world/"
+    url2 = "https://bangla.bdnews24.com/bangladesh/"
+    url3 = "https://bangla.bdnews24.com/politics/"
+    url4 = "https://bangla.bdnews24.com/sport/"
+
+    # Intenational news
+    page = requests.get(url1)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    info = soup.find_all('div', class_='column-1')
+    news_list = info[1]
+    for title, img in zip(news_list.find_all('a'), news_list.find_all('img')):
+        if News.objects.filter(title=title.text).exists():
+            continue
+        else:
+            new_news = News()
+            new_news.source_name = 'বিডিনিউজ২৪'
+            new_news.source_slug = 'bdnews24'
+            new_news.title = title.text
+            new_news.link = title.get('href')
+            new_news.img_link = img['src']
+            new_news.category_name = "আন্তর্জাতিক"
+            new_news.category_slug = "international"
+            new_news.save()
+
+    # Bangaldesh News
+    page = requests.get(url2)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    info = soup.find_all('div', class_='column-1')
+    news_list = info[1]
+    for title, img in zip(news_list.find_all('a'), news_list.find_all('img')):
+        if News.objects.filter(title=title.text).exists():
+            continue
+        else:
+            new_news = News()
+            new_news.source_name = 'বিডিনিউজ২৪'
+            new_news.source_slug = 'bdnews24'
+            new_news.title = title.text
+            new_news.link = title.get('href')
+            new_news.img_link = img['src']
+            new_news.category_name = "বাংলাদেশ"
+            new_news.category_slug = "national"
+            new_news.save()
+
+    # Poliics News
+    page = requests.get(url3)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    info = soup.find_all('div', class_='column-1')
+    news_list = info[1]
+    for title, img in zip(news_list.find_all('a'), news_list.find_all('img')):
+        if News.objects.filter(title=title.text).exists():
+            continue
+        else:
+            new_news = News()
+            new_news.source_name = 'বিডিনিউজ২৪'
+            new_news.source_slug = 'bdnews24'
+            new_news.title = title.text
+            new_news.link = title.get('href')
+            new_news.img_link = img['src']
+            new_news.category_name = "রাজনীতি"
+            new_news.category_slug = "politics"
+            new_news.save()
+
+    # Sports News
+    page = requests.get(url4)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    news_list = soup.find('div', attrs={'id': 'main'})
+    i = 1
+    for title, img in zip(news_list.find_all('a'), news_list.find_all('img')):
+        if i == 13:
+            break
+
+        elif News.objects.filter(title=title.text).exists():
+            continue
+        else:
+            new_news = News()
+            new_news.source_name = 'বিডিনিউজ২৪'
+            new_news.source_slug = 'bdnews24'
+            new_news.title = title.text
+            new_news.link = title.get('href')
+            new_news.img_link = img['src']
+            new_news.category_name = "খেলা"
+            new_news.category_slug = "sport"
+            new_news.save()
+
+        i = i + 1

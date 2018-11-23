@@ -10,16 +10,18 @@ from .scraper import samakal
 from .scraper import priyo
 from .scraper import palo
 from .scraper import kalerkonto
+from .scraper import chanel_i
+from .scraper import bdnews24
 
 
 def scrape_news(request):
-    url = "http://samakal.com/list/all"
-    samakal(url)
+    samakal("http://samakal.com/list/all")
     priyo("https://www.priyo.com/")
     palo("https://www.prothomalo.com/home/featured")
     kalerkonto("http://www.kalerkantho.com/")
+    chanel_i("https://www.channelionline.com/%E0%A6%B8%E0%A6%B0%E0%A7%8D%E0%A6%AC%E0%A6%B6%E0%A7%87%E0%A6%B7/")
+    bdnews24("https://bangla.bdnews24.com/")
     return redirect(reverse('news-list'))
-
 
 
 class NewsListView(ListView):
